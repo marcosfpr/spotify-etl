@@ -1,0 +1,21 @@
+# First install Airflow ( Hard step :-( )
+
+# initialize the database
+airflow db init
+
+airflow users create \
+    --username admin \
+    --firstname Peter \
+    --lastname Parker \
+    --role Admin \
+    --email peter@airflow.org
+
+# in ~/airflow/airflow.cfg, edit the dags file:
+dags_folder = /home/marcos/your/dags/
+
+# start the web server, default port is 8080
+airflow webserver --port 8080
+
+# start the scheduler
+# open a new terminal or else run webserver with ``-D`` option to run it as a daemon
+airflow scheduler

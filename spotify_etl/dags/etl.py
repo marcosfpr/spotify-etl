@@ -6,4 +6,9 @@
 from spotify_etl.load import load
 from spotify_etl.extract import extract
 
-load(extract())
+def run_spotify_etl():
+    load(extract())
+
+
+if __name__ == '__main__':
+    run_spotify_etl()

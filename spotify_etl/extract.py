@@ -3,18 +3,19 @@
 """
 
 import os
+import sys
 
 from datetime import datetime
 import datetime
 
 import pandas as pd
 
-import requests
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 
-USER_ID = os.environ.get('SPOTIFY_USER')
-TOKEN = os.environ.get('SPOTIFY_TOKEN')
-URL = "https://api.spotify.com/v1/me/player/recently-played?after={time}"
+USER_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+USER_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 
 class InvalidSongError(RuntimeError):
@@ -53,23 +54,22 @@ def one_day_unix_timestamp():
 
 
 def extract():
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=USER_ID,
+                                                    client_secret=USER_SECRET,
+                                                    redirect_uri="http://localhost:8888/callback",
+                                                    scope="user-read-recently-played"))
 
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer {token}".format(token=TOKEN),
-    }
-
-    # Download all songs you've listened to "after yesterday", which means in the last 24 hours
-    response = requests.get(URL.format(
-        time=one_day_unix_timestamp()), headers=headers)
-
-    data = response.json()
+    data = sp.current_user_recently_played(limit=50, after=one_day_unix_timestamp())
+    #if the length of recently_played is 0 for some reason just exit the program
+    if len(data) ==0:
+        sys.exit("[WARNING] Any song found: {data}".format(data=data))
+        
 
     song_names = []
     artist_names = []
     played_at_list = []
     timestamps = []
+
 
     for song in data["items"]:
         song_names.append(song["track"]["name"])

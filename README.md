@@ -70,7 +70,7 @@ To get a local copy up and running follow these simple steps.
 
 ## Prerequisites
 
-The prerequisites for the project is PostgreSQL and Airflow.
+The prerequisites for the project is PostgreSQL and a project on Spotify API with ``http://localhost/callback`` redirect uri.
 
 ### Installation
 
@@ -80,6 +80,7 @@ The prerequisites for the project is PostgreSQL and Airflow.
    ```
 2. Install NPM packages
    ```sh
+   EXPORT AIRFLOW_HOME=~/airflow
    pip install --require-hashes -r requirements.txt
    ```
 3. Create a .env file following the ``.env.example`` file
@@ -87,7 +88,30 @@ The prerequisites for the project is PostgreSQL and Airflow.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+1. initialize the airflow (First execution)
+```sh
+airflow db init
 
+airflow users create \
+    --username admin \
+    --firstname Peter \
+    --lastname Parker \
+    --role Admin \
+    --email peter@airflow.org
+```
+
+2. In ~/airflow/airflow.cfg, edit the dags path file:
+```dags_folder = /home/marcos/your/dags/```
+
+3. start the web server, default port is 8080
+```sh
+airflow webserver --port 8080
+```
+
+3. start the scheduler in a new terminal
+```sh
+airflow scheduler
+```
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
