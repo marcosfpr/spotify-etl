@@ -84,6 +84,11 @@ The prerequisites for the project is PostgreSQL and a project on Spotify API wit
    pip install --require-hashes -r requirements.txt
    ```
 3. Create a .env file following the ``.env.example`` file
+<p align="center">
+  <a href="https://github.com/marcosfpr/spotify-etl">
+    <img src="images/example.png" alt="Logo">
+  </a>
+</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -112,6 +117,10 @@ airflow webserver --port 8080
 ```sh
 airflow scheduler
 ```
+
+4. in scheduler, run the ETL pipeline
+
+
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
