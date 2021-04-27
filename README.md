@@ -118,8 +118,7 @@ airflow webserver --port 8080
 airflow scheduler
 ```
 
-4. in scheduler, run the ETL pipeline
-
+4. in scheduler, run the ETL pipeline to test
 
 
 <!-- ACKNOWLEDGEMENTS -->
