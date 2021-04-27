@@ -53,7 +53,7 @@ Thus, the central idea is to:
   - transform data into a useful format (Transform)
   - persist these musics into a PostgreSQL database (Load)
   - automate ETL process using Airflow (Job Scheduling)
-  - produce analytics (Visualization)
+  - produce analytics (Visualization) **Doing**
 
 ### Built With
 
@@ -70,7 +70,9 @@ To get a local copy up and running follow these simple steps.
 
 ## Prerequisites
 
-The prerequisites for the project is PostgreSQL and a project on Spotify API with ``http://localhost/callback`` redirect uri.
+The prerequisites for the project is PostgreSQL and a project on Spotify API.
+
+Obs: Configure your Spotify project adding ``http://localhost/callback`` as your redirect uri.
 
 ### Installation
 
@@ -84,11 +86,6 @@ The prerequisites for the project is PostgreSQL and a project on Spotify API wit
    pip install --require-hashes -r requirements.txt
    ```
 3. Create a .env file following the ``.env.example`` file
-<p align="center">
-  <a href="https://github.com/marcosfpr/spotify-etl">
-    <img src="images/example.png" alt="Logo">
-  </a>
-</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -118,7 +115,13 @@ airflow webserver --port 8080
 airflow scheduler
 ```
 
-4. in scheduler, run the ETL pipeline to test
+4. in scheduler, run the ETL pipeline to test:
+
+<p align="center">
+  <a href="https://github.com/marcosfpr/spotify-etl">
+    <img src="images/example.png" alt="Logo">
+  </a>
+</p>
 
 
 <!-- ACKNOWLEDGEMENTS -->
