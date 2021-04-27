@@ -1,0 +1,95 @@
+"""
+    Extraction of my Spotify recently played musics.
+"""
+
+import os
+
+from datetime import datetime
+import datetime
+
+import pandas as pd
+
+import requests
+
+
+USER_ID = os.environ.get('SPOTIFY_USER')
+TOKEN = os.environ.get('SPOTIFY_TOKEN')
+URL = "https://api.spotify.com/v1/me/player/recently-played?after={time}"
+
+
+class InvalidSongError(RuntimeError):
+    pass
+
+
+def validate_song(song: pd.DataFrame) -> bool:
+    if song.empty:
+        print("[WARNING] No songs downloaded.")
+        return False
+
+    if not pd.Series(song["played_at"]).is_unique:
+        raise InvalidSongError("[ERROR] Primary key check is violated")
+
+    if song.isnull().values.any():
+        raise InvalidSongError("[ERROR] Null song found!")
+
+    # checking timestamps
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    yesterday = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    timestamps = song["timestamp"].tolist()
+    for timestamp in timestamps:
+        if datetime.datetime.strptime(timestamp, '%Y-%m-%d') < yesterday:
+            raise InvalidSongError(
+                "[ERROR] At least one of the returned songs does not have a yesterday's timestamp: {t} != {y}".format(t=timestamp, y=yesterday))
+
+    return True
+
+
+def one_day_unix_timestamp():
+    today = datetime.datetime.now()
+    yesterday = today - datetime.timedelta(days=1)
+    yesterday_unix_timestamp = int(yesterday.timestamp()) * 1000
+    return yesterday_unix_timestamp
+
+
+def extract():
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {token}".format(token=TOKEN),
+    }
+
+    # Download all songs you've listened to "after yesterday", which means in the last 24 hours
+    response = requests.get(URL.format(
+        time=one_day_unix_timestamp()), headers=headers)
+
+    data = response.json()
+
+    song_names = []
+    artist_names = []
+    played_at_list = []
+    timestamps = []
+
+    for song in data["items"]:
+        song_names.append(song["track"]["name"])
+        artist_names.append(song["track"]["album"]["artists"][0]["name"])
+        played_at_list.append(song["played_at"])
+        timestamps.append(song["played_at"][0:10])
+
+    song_dict = {
+        "song_name": song_names,
+        "artist_name": artist_names,
+        "played_at": played_at_list,
+        "timestamp": timestamps
+    }
+
+    print(song_dict)
+
+    song_dataframe = pd.DataFrame(
+        song_dict, columns=["song_name", "artist_name", "played_at", "timestamp"])
+
+    if validate_song(song_dataframe):
+        print("[INFO] Data is valid, proceeding to Load stage.")
+
+    return song_dataframe

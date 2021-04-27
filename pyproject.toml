@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "spotify-etl"
+version = "0.1.0"
+description = ""
+authors = ["marcosfpr <marcos.rezende@aluno.ufop.edu.br>"]
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+requests = "^2.25.1"
+SQLAlchemy = "^1.4.11"
+pandas = "^1.2.4"
+psycopg2 = "^2.8.6"
+python-dotenv = "^0.17.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+autopep8 = "^1.5.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
