@@ -1,10 +1,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/marcosfpr/spotify-etl">
-    <img src="images/Spotify-Logo.png" alt="Logo" width="280" height="150">
-  </a>
-
   <h3 align="center">Spotify ETL</h3>
 
   <p align="center">
